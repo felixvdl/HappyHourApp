@@ -32,7 +32,9 @@ export class Home extends Component {
     this.props.navigator.push({
       name: routeName,
       passProps: {
-        bar: this.state.bars[id]
+        bar: this.state.bars[id],
+        latitude: this.state.latitude,
+        longitude: this.state.longitude
       }
     });
   }

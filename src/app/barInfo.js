@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { Grid, Col, Row, Icon} from 'react-native-elements'
-
+import  MapView  from 'react-native-maps'
 let { height, width } = Dimensions.get('window')
 
 
@@ -12,7 +12,7 @@ export class BarInfo extends Component {
     })
   }
   render() {
-    console.log(this.props)
+
     return(
       <View style={styles.container}>
         <View style={styles.header}>
@@ -110,7 +110,30 @@ export class BarInfo extends Component {
               {"'"+this.props.bar.info+"'"}
             </Text>
           </View>
-        </ScrollView>
+          <View style={{ height:0.4 *height}}>
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: parseFloat(this.props.bar.geolocation.split(",")[0]),
+                longitude: parseFloat(this.props.bar.geolocation.split(",")[1]),
+                latitudeDelta: 0.0102,
+                longitudeDelta: 0.0101,
+              }}
+              onPress={console.log("hello")}
+            >
+              <MapView.Marker
+                coordinate={{longitude: parseFloat(this.props.bar.geolocation.split(",")[1]), latitude: parseFloat(this.props.bar.geolocation.split(",")[0])}}
+                title={this.props.bar.name}
+                pinColor='#F9B05F'
+              />
+              <MapView.Marker
+                coordinate={{longitude: parseFloat(this.props.longitude), latitude: parseFloat(this.props.latitude)}}
+                title="you"
+                image={require('../assets/map-icon.png')}
+              />
+            </MapView>
+          </View>
+           </ScrollView>
       </View>
     )
   }
@@ -187,6 +210,19 @@ const styles = StyleSheet.create ({
     fontSize: 12,
     fontStyle: 'italic',
     color: 'grey'
+  },
+  map: {
+    position: 'absolute',
+    top: 0.03 * height,
+    left: 0.025 * width,
+    right:0,
+    bottom: 0,
+    width: 0.9 * width,
+    height: 0.3* height,
+    borderWidth: 0.5,
+    borderColor: '#F9B05F'
+
+
   }
 
 })
