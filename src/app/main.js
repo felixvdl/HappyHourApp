@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import {
   StyleSheet,
-  TouchableHighlight,
+  TouchableOpacity,
   AsyncStorage,
   Text,
   View,
@@ -16,19 +16,27 @@ let { height, width } = Dimensions.get('window')
 
 
 
-export class Main extends Component {
+export class Home extends Component {
   constructor() {
     super()
     this.state = {
       bars: [],
-      lat: "40.7292510",
-      long: "-73.9802730",
       refreshing: false,
       latitude: null,
       longitude: null,
       error: null,
     }
   }
+  navigate(routeName, id) {
+    console.log("NAVIGATOR")
+    this.props.navigator.push({
+      name: routeName,
+      passProps: {
+        bar: this.state.bars[id]
+      }
+    });
+  }
+
   componentWillMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -65,9 +73,9 @@ export class Main extends Component {
     }
   }
   render() {
+    console.log("MAINMAINMAIN")
     return(
-      <View>
-
+      <View style={styles.main}>
         <View style={styles.logo}>
           <Text>{this.state.longitude} </Text>
         </View>
@@ -80,9 +88,10 @@ export class Main extends Component {
               />
             }
           >
-
               {this.state.bars.map((bar,i) => (
-                <Bar name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} idy={i} key={i} />
+                <TouchableOpacity onPress={this.navigate.bind(this, 'bar', i)} key={i}>
+                  <Bar name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} idy={i} key={i} />
+                </TouchableOpacity>
               ))}
           </ScrollView>
         </View>
@@ -100,5 +109,9 @@ const styles = StyleSheet.create ({
      paddingTop: 0.1*height,
      alignItems: 'center'
    },
+   main: {
+     alignItems: 'center',
+     justifyContent: 'center'
+   }
 
 })

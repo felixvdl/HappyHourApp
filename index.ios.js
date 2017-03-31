@@ -1,23 +1,35 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
+'use strict'
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator
 } from 'react-native';
-import {Main} from './src/app/main'
+import {Home} from './src/app/main'
+import {BarInfo} from './src/app/barInfo'
+import {Bar} from './src/app/bar'
 
-export default class HappyHour extends Component {
+class HappyHour extends Component {
+
+  renderScene(route, navigator) {
+    if(route.name == 'home') {
+      console.log(route.name)
+      return <Home navigator={navigator} />
+    }
+    if(route.name =='bar') {
+      console.log(route.name)
+      return <BarInfo navigator={navigator} {...route.passProps}/>
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Main />
+        <Navigator
+          initialRoute={{name: 'home'}}
+          renderScene={this.renderScene.bind(this)}
+        />
       </View>
     );
   }
@@ -26,8 +38,6 @@ export default class HappyHour extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: 'white',
   },
   welcome: {

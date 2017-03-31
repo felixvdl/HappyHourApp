@@ -6,13 +6,18 @@ let { height, width } = Dimensions.get('window')
 
 
 export class Bar extends Component {
+  navigate(routeName) {
+    this.props.navigator.push({
+      name: routeName
+    });
+  }
   render() {
     return(
-      <View style={styles.barView}>
+      <View style={styles.barView} >
         <Grid>
           <Row>
             <Col size={15}>
-              <View style={styles.icon}>
+              <View style={styles.icon} >
                 <Icon
                   name='local-bar'
                   color= '#F9B05F'
