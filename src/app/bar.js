@@ -15,7 +15,7 @@ export class Bar extends Component {
               <View style={styles.icon}>
                 <Icon
                   name='local-bar'
-                  color= '#517fa4'
+                  color= '#F9B05F'
                   reverse= {true}
                   size= {14}
                 />
@@ -41,12 +41,6 @@ export class Bar extends Component {
               </Text>
           </Row>
         </Grid>
-        <View style={styles.moreInfo}>
-          <Icon
-            name='keyboard-arrow-down'
-            color='#517fa4'
-          />
-        </View>
       </View>
     )
   }
@@ -61,30 +55,30 @@ const styles = StyleSheet.create ({
    distance: {
      fontSize: 10,
      marginTop: 0.02*height,
+     color: 'grey'
    },
    deal: {
      fontSize: 12,
-     paddingBottom:10
+     paddingBottom:10,
+     fontStyle: 'italic'
    },
    barView: {
-     borderWidth: 0.5,
-     marginTop: 0.02*height,
+     borderTopWidth: 0.5,
      borderRadius: 2,
      borderColor: 'lightgrey',
-     padding: 10
+     padding: 10,
+     backgroundColor: 'white'
+
    },
    dealView: {
-     marginTop: 0.02 * height
+     marginTop: 0.02 * height,
    },
    adress: {
-     fontSize:10
+     fontSize:10,
+     color: 'grey'
    },
    icon: {
      marginTop: 0.01 * height,
 
    },
-   moreInfo: {
-     marginBottom: -0.02 * height
-   }
-
 })
