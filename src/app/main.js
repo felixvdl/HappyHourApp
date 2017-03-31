@@ -32,11 +32,27 @@ export class Home extends Component {
     this.props.navigator.push({
       name: routeName,
       passProps: {
-        bar: this.state.bars[id]
+        bar: this.state.bars[id],
+        latitude: this.state.latitude,
+        longitude: this.state.longitude
       }
     });
   }
-
+  reLocate() {
+    console.log("relocating")
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+    this.fetchData()
+  }
   componentWillMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -76,9 +92,9 @@ export class Home extends Component {
     console.log("MAINMAINMAIN")
     return(
       <View style={styles.main}>
-        <View style={styles.logo}>
-          <Text>{this.state.longitude} </Text>
-        </View>
+        <TouchableOpacity style={styles.logo} onPress={this.reLocate.bind(this)}>
+          <Text style={styles.findMe}>locate me</Text>
+        </TouchableOpacity>
         <View style={styles.bar}>
           <ScrollView
             refreshControl={
@@ -112,6 +128,10 @@ const styles = StyleSheet.create ({
    main: {
      alignItems: 'center',
      justifyContent: 'center'
+   },
+   findMe: {
+     color: '#F9B05F',
+     fontWeight: 'bold'
    }
 
 })
