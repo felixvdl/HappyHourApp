@@ -8,10 +8,12 @@ import {
   Text,
   View,
   Dimensions,
-  ScrollView
+  ScrollView,
+  RefreshControl
 } from 'react-native';
 import {Bar} from './bar'
 let { height, width } = Dimensions.get('window')
+
 
 
 export class Main extends Component {
@@ -20,19 +22,40 @@ export class Main extends Component {
     this.state = {
       bars: [],
       lat: "40.7292510",
-      long: "-73.9802730"
+      long: "-73.9802730",
+      refreshing: false,
+      latitude: null,
+      longitude: null,
+      error: null,
     }
   }
-  componentDidMount() {
+  componentWillMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
     this.fetchData()
+  }
+  _onRefresh() {
+    this.setState({refreshing: true});
+    this.fetchData().then(() => {
+      this.setState({refreshing: false});
+    });
   }
   async fetchData() {
     try {
       let response = await fetch('http://localhost:3000/api/bars', {
         method: 'GET',
         headers: {
-          'latitude': this.state.lat,
-          'longitude': this.state.long
+          'latitude': this.state.latitude,
+          'longitude': this.state.longitude
         }
       })
       let res = await JSON.parse(response._bodyText)
@@ -44,11 +67,20 @@ export class Main extends Component {
   render() {
     return(
       <View>
+
         <View style={styles.logo}>
-          <Text style={styles.logoText}>HappyHour</Text>
+          <Text>{this.state.longitude} </Text>
         </View>
         <View style={styles.bar}>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            }
+          >
+
               {this.state.bars.map((bar,i) => (
                 <Bar name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} idy={i} key={i} />
               ))}
@@ -68,10 +100,5 @@ const styles = StyleSheet.create ({
      paddingTop: 0.1*height,
      alignItems: 'center'
    },
-   logoText: {
-     fontWeight: 'bold',
-     fontSize: 24,
-     color: '#517fa4'
-   }
 
 })
