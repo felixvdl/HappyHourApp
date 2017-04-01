@@ -75,7 +75,7 @@ export class Home extends Component {
   }
   async fetchData() {
     try {
-      let response = await fetch('http://localhost:3000/api/bars', {
+      let response = await fetch('https://mysterious-brook-11592.herokuapp.com/api/bars', {
         method: 'GET',
         headers: {
           'latitude': this.state.latitude,
