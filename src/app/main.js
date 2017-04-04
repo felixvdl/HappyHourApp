@@ -10,7 +10,8 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
-  TabBarIOS
+  TabBarIOS,
+  ProgressViewIOS
 } from 'react-native';
 
 import { Icon } from 'react-native-elements'
@@ -37,7 +38,6 @@ export class Home extends Component {
     }
   }
   navigate(routeName, id) {
-    console.log("NAVIGATOR")
     this.props.navigator.push({
       name: routeName,
       passProps: {
@@ -48,7 +48,6 @@ export class Home extends Component {
     });
   }
   reLocate() {
-    console.log("relocating")
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({
@@ -65,21 +64,18 @@ export class Home extends Component {
   componentWillMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log('====LOOKING FOR COORDS=====')
 
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           error: null,
         });
-        console.log('====GOT COORDS=====')
       },
       (error) => this.setState({ error: error.message }),{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },);
     this.fetchData()
   }
   async fetchData() {
     try {
-      console.log('=====FETCHING=====')
       let response = await fetch('https://mysterious-brook-11592.herokuapp.com/api/bars', {
         method: 'GET',
         headers: {
@@ -119,16 +115,13 @@ export class Home extends Component {
 
     else if (this.state.map == true) {
       return(
-        <View style={styles.main}>
-          <TouchableOpacity style={styles.logo} onPress={this.reLocate.bind(this)}>
-            <Text style={styles.findMe}>locate me</Text>
-          </TouchableOpacity>
-          <View style={styles.mapIcon}>
+        <View>
+          <View style={styles.mapView}>
             <Icon
               type= 'material-community'
               name= 'format-list-bulleted'
               size= {28}
-              color= '#365A7D'
+              color= 'white'
               onPress={this._listView.bind(this)}
               />
           </View>
@@ -147,6 +140,8 @@ export class Home extends Component {
               title={bar.name}
               description={bar.deal}
               key={i}
+              showsUserLocation = {true}
+              pinColor='#2E5266'
             />
           ))}
           </MapView>
@@ -181,7 +176,7 @@ export class Home extends Component {
               type= 'material-community'
               name= 'google-maps'
               size= {28}
-              color= '#365A7D'
+              color= 'white'
               onPress={this._mapView.bind(this)}
               />
           </View>
@@ -194,12 +189,16 @@ export class Home extends Component {
                 />
               }
             >
-            <Swiper showsButtons={true}>
+            <Swiper showsButtons={true} loop= {false} showsPagination={false} buttonWrapperStyle={styles.swipeButton}>
+
                 {this.state.bars.map((bar,i) => (
                 <TouchableOpacity onPress={this.navigate.bind(this, 'bar', i)} key={i}>
                   <Bar name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} key={i} />
-                  </TouchableOpacity>
+                  <ProgressViewIOS style={styles.progressView} progress={i/this.state.bars.length} progressTintColor="white" trackTintColor='#2E5266'/>
+                </TouchableOpacity>
+
                 ))}
+
             </Swiper>
 
             </ScrollView>
@@ -209,8 +208,6 @@ export class Home extends Component {
     }
   }
   render() {
-    console.log("LONG:" + this.state.longitude)
-    console.log("LAT:" + this.state.latitude)
 
     return (
       <View>
@@ -224,22 +221,20 @@ export class Home extends Component {
 const styles = StyleSheet.create ({
    bar: {
       paddingTop: 12,
-      height: 0.9 * height,
    },
    logo: {
-     marginTop: 0.05 * height,
-     alignItems: 'center'
+     marginTop: 0.15 * height,
+     alignItems: 'center',
    },
    main: {
      alignItems: 'center',
      justifyContent: 'center',
-     backgroundColor: 'white',
-     position: 'absolute'
+     backgroundColor: '#4fd0ea',
    },
    findMe: {
-     color: '#F9B05F',
+     color: 'white',
      fontWeight: 'bold',
-     fontSize: 20
+     fontSize: 20,
    },
    noHappyText: {
      color: '#F9B05F',
@@ -265,8 +260,17 @@ const styles = StyleSheet.create ({
      width: 1 * width,
      height: 1* height,
      borderWidth: 0.5,
-     borderColor: '#F9B05F'
+     borderColor: '#2E5266'
+   },
+   progressView: {
+     marginTop: 0.05 *height,
+     width: 0.9 *width,
+     marginLeft: 0.05 * width
+   },
+   mapView: {
+     backgroundColor: '#4fd0ea',
+     height: 0.08*height,
+     justifyContent: 'center'
+   },
 
-
-   }
 })
