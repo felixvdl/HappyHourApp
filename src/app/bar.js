@@ -14,38 +14,20 @@ export class Bar extends Component {
   render() {
     return(
       <View style={styles.barView} >
-        <Grid>
-          <Row>
-            <Col size={15}>
-              <View style={styles.icon} >
-                <Icon
-                  name='local-bar'
-                  color= '#F9B05F'
-                  reverse= {true}
-                  size= {14}
-                />
-              </View>
-            </Col>
-            <Col size={60}>
-              <Text style={styles.name}>
-                {this.props.name}
-              </Text>
-              <Text style={styles.adress}>
-                {this.props.location}
-              </Text>
-            </Col>
-            <Col size={25}>
-              <Text style={styles.distance}>
-                {this.props.distance.toFixed(2)} miles
-              </Text>
-            </Col>
-          </Row>
-          <Row style={styles.dealView}>
-              <Text style={styles.deal}>
-                {this.props.deal}
-              </Text>
-          </Row>
-        </Grid>
+        <View style={styles.nameView}>
+          <Text style={styles.name}>
+            {this.props.name}
+          </Text>
+        </View>
+          <Text>
+            {this.props.location}
+          </Text>
+          <Text>
+            {this.props.distance.toFixed(2)}
+          </Text>
+          <Text style={styles.deal}>
+            {this.props.deal}
+          </Text>
       </View>
     )
   }
@@ -53,8 +35,9 @@ export class Bar extends Component {
 
 const styles = StyleSheet.create ({
    name: {
-      paddingTop: 12,
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      color: 'white',
+      fontSize:20
    },
 
    distance: {
@@ -68,11 +51,16 @@ const styles = StyleSheet.create ({
      fontStyle: 'italic'
    },
    barView: {
-     borderTopWidth: 0.5,
-     borderRadius: 2,
+     borderWidth: 0.5,
+     borderRadius: 6,
      borderColor: 'lightgrey',
-     padding: 10,
-     backgroundColor: 'white'
+     backgroundColor: 'white',
+     width: 0.9 * width,
+     marginLeft: 0.05 * width,
+     height: 0.35 * height,
+     marginTop: 0.2*height,
+     alignItems: 'center'
+
 
    },
    dealView: {
@@ -84,6 +72,15 @@ const styles = StyleSheet.create ({
    },
    icon: {
      marginTop: 0.01 * height,
-
    },
+   nameView: {
+     backgroundColor: '#F9B05F',
+     width: 0.9* width,
+     alignItems: 'center',
+     height: 0.08* height,
+     borderTopLeftRadius: 6,
+     borderTopRightRadius: 6,
+     justifyContent: 'center'
+
+   }
 })

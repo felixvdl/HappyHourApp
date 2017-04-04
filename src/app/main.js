@@ -15,6 +15,8 @@ import {
 
 import { Icon } from 'react-native-elements'
 import {Bar} from './bar'
+import Swiper from 'react-native-swiper';
+import  MapView  from 'react-native-maps'
 
 let { height, width } = Dimensions.get('window')
 
@@ -30,7 +32,8 @@ export class Home extends Component {
       longitude: null,
       error: null,
       initialLoad: false,
-      map: false
+      map: false,
+      swiper: true
     }
   }
   navigate(routeName, id) {
@@ -113,6 +116,7 @@ export class Home extends Component {
         </View>
       )
     }
+
     else if (this.state.map == true) {
       return(
         <View style={styles.main}>
@@ -122,12 +126,30 @@ export class Home extends Component {
           <View style={styles.mapIcon}>
             <Icon
               type= 'material-community'
-              name= 'google-maps'
+              name= 'format-list-bulleted'
               size= {28}
               color= '#365A7D'
               onPress={this._listView.bind(this)}
               />
           </View>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
+              latitudeDelta: 0.0602,
+              longitudeDelta: 0.0601,
+            }}
+          >
+          {this.state.bars.map((bar,i) => (
+            <MapView.Marker
+              coordinate={{longitude: parseFloat(bar.geolocation.split(",")[1]), latitude: parseFloat(bar.geolocation.split(",")[0])}}
+              title={bar.name}
+              description={bar.deal}
+              key={i}
+            />
+          ))}
+          </MapView>
         </View>
       )
     }
@@ -172,11 +194,14 @@ export class Home extends Component {
                 />
               }
             >
+            <Swiper showsButtons={true}>
                 {this.state.bars.map((bar,i) => (
-                  <TouchableOpacity onPress={this.navigate.bind(this, 'bar', i)} key={i}>
-                    <Bar name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} idy={i} key={i} />
+                <TouchableOpacity onPress={this.navigate.bind(this, 'bar', i)} key={i}>
+                  <Bar name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} key={i} />
                   </TouchableOpacity>
                 ))}
+            </Swiper>
+
             </ScrollView>
           </View>
         </View>
@@ -199,7 +224,6 @@ export class Home extends Component {
 const styles = StyleSheet.create ({
    bar: {
       paddingTop: 12,
-      width: 0.9*width,
       height: 0.9 * height,
    },
    logo: {
@@ -208,7 +232,9 @@ const styles = StyleSheet.create ({
    },
    main: {
      alignItems: 'center',
-     justifyContent: 'center'
+     justifyContent: 'center',
+     backgroundColor: 'white',
+     position: 'absolute'
    },
    findMe: {
      color: '#F9B05F',
@@ -227,12 +253,20 @@ const styles = StyleSheet.create ({
      height: 1 *height,
      justifyContent: 'center'
    },
-   tabBar: {
-     marginTop: 0.03 *height
-   },
    mapIcon: {
      marginLeft: 0.7*width,
      marginTop: - 0.04 *height,
-   }
+   },
+   map: {
+     top: 0,
+     left: 0,
+     right:0,
+     bottom: 0,
+     width: 1 * width,
+     height: 1* height,
+     borderWidth: 0.5,
+     borderColor: '#F9B05F'
 
+
+   }
 })
