@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal} from 'react-native';
 import { Grid, Col, Row, Icon} from 'react-native-elements'
 
 let { height, width } = Dimensions.get('window')
@@ -13,39 +13,36 @@ export class Bar extends Component {
   }
   render() {
     return(
-      <View style={styles.barView} >
-        <Grid>
-          <Row>
-            <Col size={15}>
-              <View style={styles.icon} >
-                <Icon
-                  name='local-bar'
-                  color= '#F9B05F'
-                  reverse= {true}
-                  size= {14}
-                />
-              </View>
-            </Col>
-            <Col size={60}>
-              <Text style={styles.name}>
-                {this.props.name}
-              </Text>
-              <Text style={styles.adress}>
-                {this.props.location}
-              </Text>
-            </Col>
-            <Col size={25}>
-              <Text style={styles.distance}>
-                {this.props.distance.toFixed(2)} miles
-              </Text>
-            </Col>
-          </Row>
-          <Row style={styles.dealView}>
-              <Text style={styles.deal}>
-                {this.props.deal}
-              </Text>
-          </Row>
-        </Grid>
+
+      <View style={styles.barView} shadowOpacity={0.3}>
+        <View style={styles.iconView}>
+          <Icon
+            type= 'material-community'
+            name= 'glass-tulip'
+            size= {34}
+            color= '#2E5266'
+            />
+          </View>
+          <Text style={styles.name}>
+            {this.props.name}
+          </Text>
+          <Text style={styles.deal}>
+            {this.props.deal}
+          </Text>
+          <View style={styles.footer}>
+            <Grid>
+              <Col size={65}>
+                <Text style={styles.distance}>
+                  {this.props.distance.toFixed(2)} miles
+                </Text>
+              </Col>
+              <Col size={35}>
+                <Text style={styles.location}>
+                  {this.props.location.slice(0,-10)}
+                </Text>
+              </Col>
+            </Grid>
+          </View>
       </View>
     )
   }
@@ -53,8 +50,10 @@ export class Bar extends Component {
 
 const styles = StyleSheet.create ({
    name: {
-      paddingTop: 12,
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      color: '#4fd0ea',
+      fontSize:18,
+      marginTop: 0.02 *height
    },
 
    distance: {
@@ -63,16 +62,27 @@ const styles = StyleSheet.create ({
      color: 'grey'
    },
    deal: {
-     fontSize: 12,
-     paddingBottom:10,
-     fontStyle: 'italic'
+     marginTop: 0.03 *height,
+     fontSize: 22,
+     lineHeight: 30,
+     textAlign: 'center',
+     letterSpacing: 2,
+     marginLeft: 50,
+     marginRight: 60,
+     fontFamily: 'Helvetica Neue',
+     color: '#2E5266'
    },
    barView: {
-     borderTopWidth: 0.5,
-     borderRadius: 2,
-     borderColor: 'lightgrey',
-     padding: 10,
-     backgroundColor: 'white'
+     borderWidth: 0.5,
+     borderRadius: 4,
+     borderColor: 'grey',
+     backgroundColor: 'white',
+     width: 0.9 * width,
+     marginLeft: 0.05 * width,
+     height: 0.6 * height,
+     alignItems: 'center',
+     marginTop: 0.1 *height
+
 
    },
    dealView: {
@@ -82,8 +92,25 @@ const styles = StyleSheet.create ({
      fontSize:10,
      color: 'grey'
    },
-   icon: {
-     marginTop: 0.01 * height,
-
+   iconView: {
+     marginTop: 0.05 * height
    },
+   footer: {
+     marginTop: 0.53 * height,
+     borderTopWidth: 0.5,
+     borderColor: '#9FB1BC',
+     width: 0.85 * width,
+     position: 'absolute'
+   },
+   distance: {
+     marginTop: 0.02 *height,
+     color: '#9FB1BC',
+     fontSize: 12
+   },
+   location: {
+     marginTop: 0.02 *height,
+     color: '#9FB1BC',
+     fontSize: 12,
+   }
+
 })

@@ -119,12 +119,11 @@ export class BarInfo extends Component {
                 latitudeDelta: 0.0102,
                 longitudeDelta: 0.0101,
               }}
-              onPress={console.log("hello")}
             >
               <MapView.Marker
                 coordinate={{longitude: parseFloat(this.props.bar.geolocation.split(",")[1]), latitude: parseFloat(this.props.bar.geolocation.split(",")[0])}}
                 title={this.props.bar.name}
-                pinColor='#F9B05F'
+                pinColor='#2E5266'
               />
               <MapView.Marker
                 coordinate={{longitude: parseFloat(this.props.longitude), latitude: parseFloat(this.props.latitude)}}
@@ -144,7 +143,7 @@ const styles = StyleSheet.create ({
     alignItems: 'center'
   },
   header: {
-    backgroundColor: '#F9B05F',
+    backgroundColor: '#4fd0ea',
     height: 0.08 * height,
     alignItems: 'center',
     justifyContent: 'center'
@@ -164,12 +163,13 @@ const styles = StyleSheet.create ({
   },
   adress: {
     marginTop: 0.01*height,
-    fontSize: 12
+    fontSize: 12,
+    color: '#2E5266'
   },
   distance: {
     marginTop: 0.01 * height,
     fontSize: 12,
-    color: 'grey',
+    color: '#9FB1BC',
     marginLeft: 0.3 * width
   },
   deal: {
@@ -180,7 +180,10 @@ const styles = StyleSheet.create ({
   },
   dealText: {
     fontSize: 13,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#2E5266',
+    fontFamily: 'Helvetica Neue'
+
   },
   days: {
     width: 0.6 * width,
@@ -188,15 +191,16 @@ const styles = StyleSheet.create ({
     marginLeft: 0.05* width,
     borderLeftWidth: 0.5,
     padding: 4,
-    borderColor: '#F9B05F'
+    borderColor: '#4fd0ea'
   },
   day: {
     fontWeight: 'bold',
     fontSize: 12,
-    padding: 2
+    padding: 2,
+    color: '#2E5266'
   },
   dayData: {
-    color: 'grey',
+    color: '#9FB1BC',
     fontSize: 12,
     padding: 2
   },
@@ -209,7 +213,7 @@ const styles = StyleSheet.create ({
   infoText: {
     fontSize: 12,
     fontStyle: 'italic',
-    color: 'grey'
+    color: '#9FB1BC'
   },
   map: {
     position: 'absolute',
@@ -220,7 +224,7 @@ const styles = StyleSheet.create ({
     width: 0.9 * width,
     height: 0.3* height,
     borderWidth: 0.5,
-    borderColor: '#F9B05F'
+    borderColor: '#2E5266'
 
 
   }

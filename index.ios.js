@@ -15,11 +15,9 @@ class HappyHour extends Component {
 
   renderScene(route, navigator) {
     if(route.name == 'home') {
-      console.log(route.name)
       return <Home navigator={navigator} />
     }
     if(route.name =='bar') {
-      console.log(route.name)
       return <BarInfo navigator={navigator} {...route.passProps}/>
     }
   }
