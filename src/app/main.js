@@ -11,11 +11,13 @@ import {
   RefreshControl,
   ActivityIndicator,
   TabBarIOS,
-  ProgressViewIOS
+  ProgressViewIOS,
+  Modal
 } from 'react-native';
 
 import { Icon } from 'react-native-elements'
 import {Bar} from './bar'
+import {BarInfo} from './barInfo'
 import Swiper from 'react-native-swiper';
 import  MapView  from 'react-native-maps'
 
@@ -34,7 +36,9 @@ export class Home extends Component {
       error: null,
       initialLoad: false,
       map: false,
-      swiper: true
+      swiper: true,
+      bar: 0,
+      showBar: false
     }
   }
   navigate(routeName, id) {
@@ -101,12 +105,18 @@ export class Home extends Component {
   _listView() {
     this.setState({map: false})
   }
+  _showMap(id) {
+    this.setState({showBar: true, bar: id})
+  }
+  _returnFromDetail() {
+    this.setState({showBar: false})
+  }
   renderConditional() {
     if (this.state.initialLoad == false) {
       return(
         <View style={styles.loading}>
           <ActivityIndicator
-            color='#F9B05F'
+            color='white'
             size= 'large'
           />
         </View>
@@ -123,6 +133,8 @@ export class Home extends Component {
               size= {28}
               color= 'white'
               onPress={this._listView.bind(this)}
+              underlayColor= 'transparent'
+
               />
           </View>
           <MapView
@@ -148,6 +160,7 @@ export class Home extends Component {
         </View>
       )
     }
+
     else if (this.state.bars.length == 0) {
       return (
         <View style={styles.noHappy}>
@@ -168,6 +181,9 @@ export class Home extends Component {
     } else {
       return(
         <View style={styles.main}>
+          <Modal visible={this.state.showBar} animationType='slide'>
+            <BarInfo bar={this.state.bars[this.state.bar]} longitude={this.state.longitude} latitude={this.state.latitude} return={this._returnFromDetail.bind(this)}/>
+          </Modal>
           <TouchableOpacity style={styles.logo} onPress={this.reLocate.bind(this)}>
             <Text style={styles.findMe}>locate me</Text>
           </TouchableOpacity>
@@ -178,6 +194,7 @@ export class Home extends Component {
               size= {28}
               color= 'white'
               onPress={this._mapView.bind(this)}
+              underlayColor= 'transparent'
               />
           </View>
           <View style={styles.bar}>
@@ -190,11 +207,10 @@ export class Home extends Component {
               }
             >
             <Swiper showsButtons={true} loop= {false} showsPagination={false} buttonWrapperStyle={styles.swipeButton}>
-
                 {this.state.bars.map((bar,i) => (
-                <TouchableOpacity onPress={this.navigate.bind(this, 'bar', i)} key={i}>
-                  <Bar name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} key={i} />
-                  <ProgressViewIOS style={styles.progressView} progress={i/this.state.bars.length} progressTintColor="white" trackTintColor='#2E5266'/>
+                <TouchableOpacity onPress={this._showMap.bind(this, i)} key={i}>
+                  <Bar bar={bar} name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} key={i} />
+                  <ProgressViewIOS style={styles.progressView} progress={(i+1)/this.state.bars.length} progressTintColor="white" trackTintColor='#2E5266'/>
                 </TouchableOpacity>
 
                 ))}
@@ -208,11 +224,9 @@ export class Home extends Component {
     }
   }
   render() {
-
     return (
       <View>
         {this.renderConditional()}
-
       </View>
     )
   }
@@ -234,7 +248,8 @@ const styles = StyleSheet.create ({
    findMe: {
      color: 'white',
      fontWeight: 'bold',
-     fontSize: 20,
+     fontSize: 24,
+     fontFamily: 'Helvetica Neue'
    },
    noHappyText: {
      color: '#F9B05F',
@@ -246,7 +261,8 @@ const styles = StyleSheet.create ({
    },
    loading: {
      height: 1 *height,
-     justifyContent: 'center'
+     justifyContent: 'center',
+     backgroundColor: '#4fd0ea'
    },
    mapIcon: {
      marginLeft: 0.7*width,
