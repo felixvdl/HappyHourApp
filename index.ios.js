@@ -17,9 +17,6 @@ class HappyHour extends Component {
     if(route.name == 'home') {
       return <Home navigator={navigator} />
     }
-    if(route.name =='bar') {
-      return <BarInfo navigator={navigator} {...route.passProps}/>
-    }
   }
   render() {
     return (
