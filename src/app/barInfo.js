@@ -21,7 +21,7 @@ export class BarInfo extends Component {
         <View style={styles.header}>
           <View style={styles.headerBack}>
             <Icon
-              name="keyboard-arrow-left"
+              name="close"
               color='white'
               onPress={ this.goBack.bind(this, 'home') }
               underlayColor= 'transparent'

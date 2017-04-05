@@ -116,7 +116,7 @@ export class Home extends Component {
       return(
         <View style={styles.loading}>
           <ActivityIndicator
-            color='#F9B05F'
+            color='white'
             size= 'large'
           />
         </View>
@@ -210,7 +210,7 @@ export class Home extends Component {
                 {this.state.bars.map((bar,i) => (
                 <TouchableOpacity onPress={this._showMap.bind(this, i)} key={i}>
                   <Bar bar={bar} name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} key={i} />
-                  <ProgressViewIOS style={styles.progressView} progress={i/this.state.bars.length} progressTintColor="white" trackTintColor='#2E5266'/>
+                  <ProgressViewIOS style={styles.progressView} progress={(i+1)/this.state.bars.length} progressTintColor="white" trackTintColor='#2E5266'/>
                 </TouchableOpacity>
 
                 ))}
@@ -261,7 +261,8 @@ const styles = StyleSheet.create ({
    },
    loading: {
      height: 1 *height,
-     justifyContent: 'center'
+     justifyContent: 'center',
+     backgroundColor: '#4fd0ea'
    },
    mapIcon: {
      marginLeft: 0.7*width,
