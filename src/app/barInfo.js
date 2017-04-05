@@ -10,9 +10,7 @@ export class BarInfo extends Component {
     this.props.return()
   }
   openMaps(){
-     console.log(this.props.bar.geolocation)
     let url = 'https://www.google.com/maps/place/' + this.props.bar.location
-    console.log(url)
     Linking.openURL(url)
   }
   render() {
@@ -23,7 +21,7 @@ export class BarInfo extends Component {
             <Icon
               name="close"
               color='white'
-              onPress={ this.goBack.bind(this, 'home') }
+              onPress={ this.goBack.bind(this) }
               underlayColor= 'transparent'
 
             />

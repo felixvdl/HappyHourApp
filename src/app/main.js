@@ -3,7 +3,6 @@ import React, {Component} from 'react'
 import {
   StyleSheet,
   TouchableOpacity,
-  AsyncStorage,
   Text,
   View,
   Dimensions,
@@ -12,17 +11,18 @@ import {
   ActivityIndicator,
   TabBarIOS,
   ProgressViewIOS,
-  Modal
+  Modal,
+  Image
 } from 'react-native';
 
 import { Icon } from 'react-native-elements'
-import {Bar} from './bar'
-import {BarInfo} from './barInfo'
+import { Bar } from './bar'
+import { BarInfo } from './barInfo'
+import { Map } from './map'
 import Swiper from 'react-native-swiper';
-import  MapView  from 'react-native-maps'
+import MapView  from 'react-native-maps'
 
 let { height, width } = Dimensions.get('window')
-
 
 
 export class Home extends Component {
@@ -111,6 +111,9 @@ export class Home extends Component {
   _returnFromDetail() {
     this.setState({showBar: false})
   }
+  _returnFromMap() {
+    this.setState({map:false})
+  }
   renderConditional() {
     if (this.state.initialLoad == false) {
       return(
@@ -122,49 +125,10 @@ export class Home extends Component {
         </View>
       )
     }
-
-    else if (this.state.map == true) {
-      return(
-        <View>
-          <View style={styles.mapView}>
-            <Icon
-              type= 'material-community'
-              name= 'format-list-bulleted'
-              size= {28}
-              color= 'white'
-              onPress={this._listView.bind(this)}
-              underlayColor= 'transparent'
-
-              />
-          </View>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: this.state.latitude,
-              longitude: this.state.longitude,
-              latitudeDelta: 0.0602,
-              longitudeDelta: 0.0601,
-            }}
-          >
-          {this.state.bars.map((bar,i) => (
-            <MapView.Marker
-              coordinate={{longitude: parseFloat(bar.geolocation.split(",")[1]), latitude: parseFloat(bar.geolocation.split(",")[0])}}
-              title={bar.name}
-              description={bar.deal}
-              key={i}
-              showsUserLocation = {true}
-              pinColor='#2E5266'
-            />
-          ))}
-          </MapView>
-        </View>
-      )
-    }
-
     else if (this.state.bars.length == 0) {
       return (
         <View style={styles.noHappy}>
-          <ScrollView style={{height: 0.8 *height}}
+          <ScrollView style={{height: 1 *height}}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.refreshing}
@@ -175,15 +139,29 @@ export class Home extends Component {
             <Text style={styles.noHappyText}>
               No happy hours going on at this moment
             </Text>
+            <View style={styles.noHappyImg}>
+              <Image
+                source={require('../assets/emoticon-sad.png')}
+              />
+            </View>
+            <Text style={styles.noHappyText}>
+              Come back later for more
+            </Text>
           </ScrollView>
         </View>
       )
     } else {
       return(
         <View style={styles.main}>
+
           <Modal visible={this.state.showBar} animationType='slide'>
             <BarInfo bar={this.state.bars[this.state.bar]} longitude={this.state.longitude} latitude={this.state.latitude} return={this._returnFromDetail.bind(this)}/>
           </Modal>
+
+          <Modal visible={this.state.map} animationType='slide'>
+            <Map bars={this.state.bars} latitude={this.state.latitude} longitude={this.state.longitude} return={this._returnFromMap.bind(this)}/>
+          </Modal>
+          
           <TouchableOpacity style={styles.logo} onPress={this.reLocate.bind(this)}>
             <Text style={styles.findMe}>locate me</Text>
           </TouchableOpacity>
@@ -252,12 +230,19 @@ const styles = StyleSheet.create ({
      fontFamily: 'Helvetica Neue'
    },
    noHappyText: {
-     color: '#F9B05F',
-     fontWeight: 'bold'
+     color: 'white',
+     fontWeight: 'bold',
+     marginTop: 0.2 *height,
+     textAlign: 'center',
+
    },
    noHappy: {
      alignItems: 'center',
-     marginTop: 0.1 * height
+     backgroundColor: '#4fd0ea'
+   },
+   noHappyImg: {
+     marginLeft: 0.02 * width,
+     marginBottom: -0.1*height
    },
    loading: {
      height: 1 *height,
@@ -268,25 +253,10 @@ const styles = StyleSheet.create ({
      marginLeft: 0.7*width,
      marginTop: - 0.04 *height,
    },
-   map: {
-     top: 0,
-     left: 0,
-     right:0,
-     bottom: 0,
-     width: 1 * width,
-     height: 1* height,
-     borderWidth: 0.5,
-     borderColor: '#2E5266'
-   },
    progressView: {
      marginTop: 0.05 *height,
      width: 0.9 *width,
      marginLeft: 0.05 * width
-   },
-   mapView: {
-     backgroundColor: '#4fd0ea',
-     height: 0.08*height,
-     justifyContent: 'center'
    },
 
 })
