@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, TouchableHighlight, Linking} from 'react-native';
 import { Grid, Col, Row, Icon} from 'react-native-elements'
 import  MapView  from 'react-native-maps'
 let { height, width } = Dimensions.get('window')
 
 
 export class BarInfo extends Component {
-  goBack(routeName) {
-    this.props.navigator.push({
-      name: routeName,
-    })
+  goBack() {
+    this.props.return()
+  }
+  openMaps(){
+     console.log(this.props.bar.geolocation)
+    let url = 'https://www.google.com/maps/place/' + this.props.bar.location
+    console.log(url)
+    Linking.openURL(url)
   }
   render() {
-
     return(
       <View style={styles.container}>
         <View style={styles.header}>
@@ -21,6 +24,8 @@ export class BarInfo extends Component {
               name="keyboard-arrow-left"
               color='white'
               onPress={ this.goBack.bind(this, 'home') }
+              underlayColor= 'transparent'
+
             />
           </View>
           <Text style={styles.headerText}>
@@ -110,7 +115,7 @@ export class BarInfo extends Component {
               {"'"+this.props.bar.info+"'"}
             </Text>
           </View>
-          <View style={{ height:0.4 *height}}>
+          <TouchableOpacity style={{ height:0.4 *height}} onPress={this.openMaps.bind(this)}>
             <MapView
               style={styles.map}
               initialRegion={{
@@ -131,8 +136,8 @@ export class BarInfo extends Component {
                 image={require('../assets/map-icon.png')}
               />
             </MapView>
-          </View>
-           </ScrollView>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
     )
   }
@@ -151,7 +156,8 @@ const styles = StyleSheet.create ({
   headerText: {
     color: 'white',
     marginTop: -0.03* height,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize:18
   },
   headerBack: {
     marginRight: 0.9 * width,
@@ -179,10 +185,12 @@ const styles = StyleSheet.create ({
     marginLeft: 0.07* width,
   },
   dealText: {
-    fontSize: 13,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#2E5266',
-    fontFamily: 'Helvetica Neue'
+    fontFamily: 'Helvetica Neue',
+    textAlign: 'center',
+
 
   },
   days: {
@@ -195,23 +203,23 @@ const styles = StyleSheet.create ({
   },
   day: {
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 14,
     padding: 2,
     color: '#2E5266'
   },
   dayData: {
     color: '#9FB1BC',
-    fontSize: 12,
+    fontSize: 14,
     padding: 2
   },
   info: {
-    marginTop: 0.05 *height,
+    marginTop: 0.03 *height,
     alignItems: 'center',
 
     padding: 5
   },
   infoText: {
-    fontSize: 12,
+    fontSize: 14,
     fontStyle: 'italic',
     color: '#9FB1BC'
   },

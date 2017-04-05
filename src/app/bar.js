@@ -6,9 +6,14 @@ let { height, width } = Dimensions.get('window')
 
 
 export class Bar extends Component {
-  navigate(routeName) {
+  navigate(routeName, id) {
     this.props.navigator.push({
-      name: routeName
+      name: routeName,
+      passProps: {
+        bar: this.state.bars[id],
+        latitude: this.state.latitude,
+        longitude: this.state.longitude
+      }
     });
   }
   render() {
@@ -27,7 +32,7 @@ export class Bar extends Component {
             {this.props.name}
           </Text>
           <Text style={styles.deal}>
-            {this.props.deal}
+            {this.props.deal.slice(10)}
           </Text>
           <View style={styles.footer}>
             <Grid>
@@ -52,7 +57,7 @@ const styles = StyleSheet.create ({
    name: {
       fontWeight: 'bold',
       color: '#4fd0ea',
-      fontSize:18,
+      fontSize:20,
       marginTop: 0.02 *height
    },
 
@@ -63,7 +68,7 @@ const styles = StyleSheet.create ({
    },
    deal: {
      marginTop: 0.03 *height,
-     fontSize: 22,
+     fontSize: 24,
      lineHeight: 30,
      textAlign: 'center',
      letterSpacing: 2,
