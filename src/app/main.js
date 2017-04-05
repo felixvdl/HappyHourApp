@@ -161,7 +161,7 @@ export class Home extends Component {
           <Modal visible={this.state.map} animationType='slide'>
             <Map bars={this.state.bars} latitude={this.state.latitude} longitude={this.state.longitude} return={this._returnFromMap.bind(this)}/>
           </Modal>
-          
+
           <TouchableOpacity style={styles.logo} onPress={this.reLocate.bind(this)}>
             <Text style={styles.findMe}>locate me</Text>
           </TouchableOpacity>
@@ -184,9 +184,9 @@ export class Home extends Component {
                 />
               }
             >
-            <Swiper showsButtons={true} loop= {false} showsPagination={false} buttonWrapperStyle={styles.swipeButton}>
+            <Swiper showsButtons={false} loop= {false} showsPagination={false} buttonWrapperStyle={styles.swipeButton}>
                 {this.state.bars.map((bar,i) => (
-                <TouchableOpacity onPress={this._showMap.bind(this, i)} key={i}>
+                <TouchableOpacity onPress={this._showMap.bind(this, i)} key={i} activeOpacity= {0.9} style={{height:0.6*height}}>
                   <Bar bar={bar} name={bar.name} idx={bar.id} location={bar.location} deal={bar.deal} info={bar.info} wednesday={bar.wednesday} thursday={bar.thursday} geolocation={bar.geolocation}  distance={bar.distance} key={i} />
                   <ProgressViewIOS style={styles.progressView} progress={(i+1)/this.state.bars.length} progressTintColor="white" trackTintColor='#2E5266'/>
                 </TouchableOpacity>
@@ -258,5 +258,10 @@ const styles = StyleSheet.create ({
      width: 0.9 *width,
      marginLeft: 0.05 * width
    },
+   buttonText: {
+     color: 'red',
+     marginTop: -200,
+     fontSize: 200
+   }
 
 })

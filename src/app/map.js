@@ -21,7 +21,7 @@ export class Map extends Component {
             color= 'white'
             onPress={ this.goBack.bind(this) }
             underlayColor= 'transparent'
-
+            iconStyle={styles.icon}
             />
         </View>
         <MapView
@@ -43,6 +43,11 @@ export class Map extends Component {
             pinColor='#2E5266'
           />
         ))}
+        <MapView.Marker
+          coordinate={{longitude: parseFloat(this.props.longitude), latitude: parseFloat(this.props.latitude)}}
+          title="you"
+          image={require('../assets/map-icon.png')}
+        />
         </MapView>
       </View>
     )
@@ -66,4 +71,7 @@ const styles = StyleSheet.create ({
     borderWidth: 0.5,
     borderColor: '#2E5266'
   },
+  icon: {
+    marginTop: 0.02 *height
+  }
 })

@@ -113,7 +113,7 @@ export class BarInfo extends Component {
               {"'"+this.props.bar.info+"'"}
             </Text>
           </View>
-          <TouchableOpacity style={{ height:0.4 *height}} onPress={this.openMaps.bind(this)}>
+          <TouchableOpacity style={{ height:0.4 *height}} onPress={this.openMaps.bind(this)} activeOpacity={0.9}>
             <MapView
               style={styles.map}
               initialRegion={{
